@@ -1,0 +1,15 @@
+{
+  "name": "gambler",
+  "version": "1.0.0",
+  "description": "gambling discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kian Salehi",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "mongodb": "^3.6.6"
+  }
+}

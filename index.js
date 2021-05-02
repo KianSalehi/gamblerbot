@@ -41,6 +41,10 @@ client.on('message', async msg =>{
         await dig(msg);
 
     }
+    if (msg.content.toLowerCase()===';;help'){
+        let url = "https://github.com/KianSalehi/gambler-bot"
+        await msg.reply("To look over the commands, please visit the Github page!" + url)
+    }
 });
 
 async function crash (msg, amount){

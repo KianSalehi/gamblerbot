@@ -68,7 +68,7 @@ client.on('message', async msg =>{
                 {name:"crash", value:"Command: -crash (bet-amount)"},
                 {name:"dig", value:"Command: -dig"},
                 {name:"duel", value:"Command: -duel @user (bet-amount)"},
-                {name:"guessLower", value:"Command: -guess (1-99) (bet-amount)"})
+                {name:"guess lower", value:"Command: -guess (1-99) (bet-amount)"})
             .setURL(url);
         await msg.reply(replyEmblem)
     }

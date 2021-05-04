@@ -11,7 +11,7 @@ async function blackjack(msg, amount, balance, dig, client){
         amount = balance;
     }
     amount = parseInt(amount);
-    let profit = 2*amount;
+    let profit = amount;
     if((amount===undefined) || isNaN(amount)){
         msg.reply("Please enter a valid amount");
         return;

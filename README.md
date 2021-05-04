@@ -3,14 +3,18 @@ A discord gambling game bot made using Node.js framework, MongoDB, and discordjs
 
 ## How to use the bot on discord
 ```
-// To get see the commands on this github page
-;;help
+// To see the commands and the redirect link to github
+-help
 // To check balance
-;;balance
+-balance
 // To get free money every 12 hours
-;;dig
+-dig
 // To play crash
-;;crash <bet-amount>
+-crash <bet-amount>
 // To play blackjack
-;;blackjack <bet-amount>
+-blackjack <bet-amount>
+// To play guess lower
+-guess <1-99> <bet-amount>
+// To duel
+-duel @user <bet-amount>
 ```

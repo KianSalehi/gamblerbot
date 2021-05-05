@@ -17,4 +17,6 @@ A discord gambling game bot made using Node.js framework, MongoDB, and discordjs
 -guess <1-99> <bet-amount>
 // To duel
 -duel @user <bet-amount>
+// To play hide
+-hide <1-3> <bet-amount>
 ```

@@ -80,7 +80,8 @@ client.on('message', async msg =>{
                 {name:"crash", value:"Command: -crash (bet-amount)"},
                 {name:"dig", value:"Command: -dig"},
                 {name:"duel", value:"Command: -duel @user (bet-amount)"},
-                {name:"guess lower", value:"Command: -guess (1-99) (bet-amount)"})
+                {name:"guess lower", value:"Command: -guess (1-99) (bet-amount)"},
+                {name:"Hide", value:"Command: -hide (1-3) (bet-amount)"})
             .setURL(url);
         await msg.reply(replyEmblem)
     }

@@ -7,7 +7,8 @@ const updateMoney = require('./helpers/updateMoney');
 const blackjack = require('./games/blackjack');
 const crash = require('./games/crash');
 const guessLower = require('./games/guessLower');
-const duel = require('./games/duel')
+const duel = require('./games/duel');
+const hideHouse = require('./games/hide');
 //Discord client login
 client.login(secret["client-Secret"]);
 
@@ -40,6 +41,12 @@ client.on('message', async msg =>{
         let number = msg.content.split(' ')[1];
         await guessLower.guessLower(msg, number, amount, values.balance, values.dig);
     }
+    else if (msg.content.toLowerCase().startsWith('-hide')){
+        let values = await checkRegistered.checkRegistered(discordID, discordUsername);
+        let amount = msg.content.split(' ')[2];
+        let hideNumber = msg.content.split(' ')[1];
+        await hideHouse.hide(msg, hideNumber, amount, values.balance, values.dig);
+    }
     else if (msg.content.toLowerCase().startsWith('-duel')){
         let values = await checkRegistered.checkRegistered(discordID, discordUsername);
         let enemyID = msg.mentions.users.first();
@@ -54,6 +61,11 @@ client.on('message', async msg =>{
     else if (msg.content.toLowerCase()==='-dig'){
         let values = await checkRegistered.checkRegistered(discordID, discordUsername);
         await dig(msg, values.balance, values.dig);
+
+    }
+    else if (msg.content.toLowerCase()==='-beg'){
+        let values = await checkRegistered.checkRegistered(discordID, discordUsername);
+        await beg(msg, values.balance, values.dig);
 
     }
     else if (msg.content.toLowerCase()==='-help'){
@@ -80,21 +92,21 @@ async function dig(msg, balance, dig){
     let discordName = msg.author.username;
     if (dig === false){
         dig = true;
-        let random=[2500,5000,3000,1000,3500,4500];
+        let random=[500,1000,1500,750,1750,3000];
         let extraMoney = (Math.random()*5).toFixed(0);
         extraMoney = parseInt(extraMoney);
         extraMoney = random[extraMoney];
         msg.reply(`You found $${extraMoney}!`);
         await updateMoney.updateMoney(discordID, discordName, (balance+extraMoney), dig);
-        let wait = setInterval(()=>{
-            balance = getBalance.getBalance(discordID);
+        let wait = setInterval(async ()=>{
+            balance = await getBalance.getBalance(discordID);
             dig = false;
-            updateMoney.updateMoney(discordID, discordName, balance, dig)
+            await updateMoney.updateMoney(discordID, discordName, balance, dig)
             clearInterval(wait);
-        },43200000)
+        },10800000)
     }
     else{
-        msg.reply("You have already claimed your free chance, please wait 12 hrs!");}
+        msg.reply("You have already claimed your free chance, please wait 3 hrs!");}
 
 }
 
@@ -103,7 +115,29 @@ async function balance(msg, balance){
     msg.reply(`You have $${balance} in balance.`);
 }
 
-//async function fight(){}
+// when teh user has less than $5 and you can get maximum of $5-50
+async function beg(msg, balance, dig){
+    let discordID = msg.author.id;
+    let discordName = msg.author.username;
+    if (balance <= 50){
+        let random=[10,25,15,35,5,45];
+        let extraMoney = (Math.random()*5).toFixed(0);
+        extraMoney = parseInt(extraMoney);
+        extraMoney = random[extraMoney];
+        msg.reply(`You begged for $${extraMoney}!`);
+        await updateMoney.updateMoney(discordID, discordName, (balance+extraMoney), dig);
+    }
+    else{
+        msg.reply("You cannot beg if you have more than $50!");}
+}
+
+
+
+
+
+
+
+
 
 //async function horse(){}
 

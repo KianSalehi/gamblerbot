@@ -5,7 +5,7 @@ const Discord = require('discord.js');
 async function crash (msg, amount, balance, dig, client){
     let discordID = msg.author.id;
     let discordUsername = msg.author.username;
-
+    let holder = true;
     if (amount === "all"){
         amount = balance;
     }
@@ -71,16 +71,17 @@ async function crash (msg, amount, balance, dig, client){
                             .addField("Balance", `$${balance-loss}`);
                         crashMessage.edit(replyEmbed);
                         updateMoney.updateMoney(discordID, discordUsername, (balance-loss), dig);
+                        holder = false;
                     }
                 },2000);
 
                 client.on('message', (msg)=>{
-                    if (msg.content.toLowerCase()==="-stop" && !(multiplier>=stop) && msg.author.id === discordID){
+                    if (msg.content.toLowerCase()==="-stop" && !(multiplier>=stop) && msg.author.id === discordID && holder === true){
                         clearInterval(refreshID);
                         replyEmbed = new Discord.MessageEmbed()
                             .setColor('GREEN')
                             .setTitle("Crash")
-                            .setDescription(`<@${discordID}> you have won $${amount}`)
+                            .setDescription(`<@${discordID}> you have won $${newProfit}`)
                             .addFields(
                                 {inline: true, name:'Multiplier ', value: `${multiplier}x` },
                                 {inline: true, name:"Profit: ", value: `$${newProfit}`}
@@ -89,6 +90,7 @@ async function crash (msg, amount, balance, dig, client){
                             .addField("Balance", `$${balance+newProfit}`);
                         crashMessage.edit(replyEmbed);
                         updateMoney.updateMoney(discordID,discordUsername,(balance+newProfit), dig);
+                        holder = false
                         return;
                     }
                 });

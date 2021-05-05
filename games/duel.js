@@ -6,6 +6,10 @@ const checkRegistered = require('../helpers/checkRegistered');
 async function duel(msg, enemy, amount, balance, dig, client){
     let discordID = msg.author.id;
     let discordName = msg.author.username;
+    if((enemy===undefined) || (enemy===" ")){
+        msg.reply("Please tag the person you want to duel");
+        return;
+    }
     let enemyID = enemy.id;
     let enemyName = enemy.username;
     let enemyValues = await checkRegistered.checkRegistered(enemyID, enemyName);
@@ -18,10 +22,7 @@ async function duel(msg, enemy, amount, balance, dig, client){
     }
 
     amount = parseInt(amount);
-    if((enemy===undefined) || (enemy===" ")){
-        msg.reply("Please tag the person you want to duel");
-        return;
-    }
+
     if((amount===undefined) || (isNaN(amount))){
         msg.reply("Please enter a valid amount");
         return;
@@ -45,14 +46,17 @@ async function duel(msg, enemy, amount, balance, dig, client){
                     holder =false;
                     let userHealth=100;
                     let enemyHealth = 100;
-                    let userTurn = true;
-                    let enemyTurn = false;
+                    let trueOrFalse = [true,false]
+                    let randomized = (Math.random()*1).toFixed(0);
+                    randomized = parseInt(randomized);
+                    let userTurn = trueOrFalse[randomized];
+                    let enemyTurn = !userTurn;
                     let refreshID = setInterval(()=>{
                         if ((userHealth <= 0)){
                             let replyEmbed = new Discord.MessageEmbed()
                                 .setColor('GOLD')
                                 .setTitle("Duel")
-                                .setDescription(`<@${enemyID}> has killed <@!${discordID}> and he won $${amount}`)
+                                .setDescription(`<@${enemyID}> has killed <@!${discordID}> and won $${amount}`)
                                 .addFields({inline: true, name:`${discordName}: `, value: `${userHealth}hp` },
                                     {inline: true, name:`${enemyName}`, value: `${enemyHealth}hp`});
                             msg.reply(replyEmbed);
@@ -65,7 +69,7 @@ async function duel(msg, enemy, amount, balance, dig, client){
                             let replyEmbed = new Discord.MessageEmbed()
                                 .setColor('GOLD')
                                 .setTitle("Duel")
-                                .setDescription(`<@${discordID}> has killed <@!${enemyID}> and he won $${amount}`)
+                                .setDescription(`<@${discordID}> has killed <@!${enemyID}> and won $${amount}`)
                                 .addFields({inline: true, name:`${discordName}: `, value: `${userHealth}hp` },
                                     {inline: true, name:`${enemyName}`, value: `${enemyHealth}hp`});
                             msg.reply(replyEmbed);

@@ -143,6 +143,10 @@ async function blackjack(msg, amount, balance, dig, client){
                 }
             }
             else if ((msg.content.toLowerCase() === "-double") && (msg.author.id === discordID) && (holder === true)) {
+                if ((2*amount)> balance){
+                    hasHit = true;
+                    msg.reply('You cannot double more than your balance');
+                }
                 if (hasHit === false) {
                     let secondCondition = true;
                     amount = 2 * amount;
@@ -253,7 +257,7 @@ function blackjackSum(hand) {
     if (counterA > 0){
         let condition = true
         while (condition){
-            if (sum > 10){
+            if (sum > 11){
                 condition = false
             }
             else if(sum<=10){

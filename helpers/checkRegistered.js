@@ -16,19 +16,19 @@ async function checkRegistered(discordID, discordName){
             dig: false
         }
         await client.db("GamblerBot").collection("users").insertOne(newUser);
+        await client.close();
         return {
             balance:5000,
             dig:false
         }
     }
     else{
+        await client.close();
         return {
             balance:query.money,
             dig:query.dig
         }
     }
-    if (client){
-        await client.close();
-    }
+
 }
 module.exports={checkRegistered}

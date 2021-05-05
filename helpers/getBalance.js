@@ -7,7 +7,7 @@ async function getBalance(discordID){
     const MClient = new MongoClient(MongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     let client = await MClient.connect();
     let query = await client.db("GamblerBot").collection("users").findOne({discordID:discordID});
-    if (client){ client.close();}
+    if (client){ await client.close();}
     return query.money;
 
 }

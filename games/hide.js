@@ -1,8 +1,9 @@
 const updateMoney = require('../helpers/updateMoney');
 const Discord = require('discord.js');
+const setInGame = require('../helpers/setInGame');
 
 // Four houses, user picks a house
-async function hide(msg, hide, amount, balance, dig){
+async function hide(msg, hide, amount, balance, dig, inGame){
     let discordID = msg.author.id;
     let discordName = msg.author.username;
 
@@ -23,7 +24,12 @@ async function hide(msg, hide, amount, balance, dig){
         msg.reply("You do not have enough money!");
         return;
     }
+    if(inGame == true){
+        msg.reply("You are already in a game");
+        return;
+    }
     let houses = [1,2,3];
+    await setInGame.setInGame(discordID, discordName, balance, dig, true);
 
     if(hide === 1){
         let replyEmbed = new Discord.MessageEmbed()
@@ -97,7 +103,7 @@ async function hide(msg, hide, amount, balance, dig){
                     )
                     .addField("Balance:", `$${balance+amount}`);
                 msg.reply(replyEmbed);
-                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig)
+                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig, false)
                 clearInterval(wait);
             }
             else if (!(wolf===hide)){
@@ -143,7 +149,7 @@ async function hide(msg, hide, amount, balance, dig){
                     .addField("Balance:", `$${balance+amount}`);
 
                 msg.reply(replyEmbed);
-                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig)
+                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig, false)
                 clearInterval(wait);
             }
             else if (!(wolf===hide)){
@@ -190,7 +196,7 @@ async function hide(msg, hide, amount, balance, dig){
                     .addField("Balance:", `$${balance+amount}`);
 
                 msg.reply(replyEmbed);
-                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig)
+                updateMoney.updateMoney(discordID, discordName, (balance+amount), dig, false)
                 clearInterval(wait);
             }
             else if (!(wolf===hide)){

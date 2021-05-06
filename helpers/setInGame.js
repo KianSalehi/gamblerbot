@@ -3,7 +3,7 @@ const secret = require('../secrets.json');
 const MongoUri = `mongodb+srv://${secret.MongoDBUser}:${secret.MongoDBPass}@cluster0.7aovf.mongodb.net/GamblerBot?retryWrites=true&w=majority`
 
 // function to update the balance of the user
-async function updateMoney(discordID,discordName, newMoney, dig, inGame){
+async function setInGame(discordID,discordName, newMoney, dig, inGame){
     const MClient = new MongoClient(MongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     let newUpdate = {
         name:discordName,
@@ -18,4 +18,4 @@ async function updateMoney(discordID,discordName, newMoney, dig, inGame){
 
     });
 }
-module.exports={updateMoney}
+module.exports={setInGame}

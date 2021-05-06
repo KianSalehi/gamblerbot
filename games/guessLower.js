@@ -1,8 +1,9 @@
 const updateMoney = require('../helpers/updateMoney');
 const Discord = require('discord.js');
+const setInGame = require('../helpers/setInGame');
 
 // function for guessLower
-async function guessLower(msg, number, amount, balance, dig){
+async function guessLower(msg, number, amount, balance, dig, inGame){
     let discordID = msg.author.id;
     let discordName = msg.author.username;
 
@@ -23,7 +24,11 @@ async function guessLower(msg, number, amount, balance, dig){
         msg.reply("You do not have enough money!");
         return;
     }
-
+    if(inGame == true){
+        msg.reply("You are already in a game");
+        return;
+    }
+    await setInGame.setInGame(discordID,discordName, balance, dig, true);
     let randomNumber = ((Math.random()*100)+1).toFixed(0);
     randomNumber = parseInt(randomNumber);
     let difference = number - randomNumber;
@@ -37,7 +42,7 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance-amount}`);
         msg.reply(replyEmblem);
-        await updateMoney.updateMoney(discordID, discordName, (balance-amount), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance-amount), dig, false);
         return;
     }
     else if ((difference>0) && (difference <= 10)){
@@ -51,7 +56,7 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance+profit}`);
         msg.reply(replyEmblem);
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         return;
     }
     else if ((difference>10) && (difference <= 20)){
@@ -65,7 +70,7 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance+profit}`);
         msg.reply(replyEmblem);
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         return;
     }
     else if ((difference>20) && (difference <= 30)){
@@ -79,7 +84,7 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance+profit}`);
         msg.reply(replyEmblem);
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         return;
     }
     else if ((difference>30) && (difference <= 40)){
@@ -93,7 +98,7 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance+profit}`);
         msg.reply(replyEmblem);
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         return;
     }
     else if ((difference>40) && (difference <= 50)){
@@ -107,12 +112,12 @@ async function guessLower(msg, number, amount, balance, dig){
                 {name:"You guessed:", value:`${number}`, inline:true})
             .addField("Balance", `$${balance+profit}`);
         msg.reply(replyEmblem)
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         return;
     }
     else if (difference>50){
         let profit = amount *0.05
-        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig);
+        await updateMoney.updateMoney(discordID, discordName, (balance+profit), dig, false);
         let replyEmblem = new Discord.MessageEmbed()
             .setColor("GREEN")
             .setTitle("Guess Lower!")

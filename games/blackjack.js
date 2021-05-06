@@ -1,8 +1,8 @@
 const updateMoney = require('../helpers/updateMoney');
 const Discord = require('discord.js');
-
+const setInGame = require('../helpers/setInGame');
 //function for blackjack
-async function blackjack(msg, amount, balance, dig, client){
+async function blackjack(msg, amount, balance, dig, inGame, client){
     let holder = true;
     let discordID = msg.author.id;
     let discordUsername = msg.author.username;
@@ -20,6 +20,10 @@ async function blackjack(msg, amount, balance, dig, client){
         msg.reply("You do not have enough money!");
         return;
     }
+    if(inGame == true){
+        msg.reply("You are already in a game");
+        return;
+    }
     let userSum = 0;
     let userFirst = blackjackHelper();
     let userSecond = blackjackHelper();
@@ -32,7 +36,7 @@ async function blackjack(msg, amount, balance, dig, client){
     let botSum = 0;
     let botArray=[botFirst.number];
     botSum = blackjackSum(botArray);
-
+    await setInGame.setInGame(discordID,discordUsername, balance, dig, true);
     let replyEmbed = new Discord.MessageEmbed()
         .setColor('BLUE')
         .setTitle("BlackJack")
@@ -63,7 +67,7 @@ async function blackjack(msg, amount, balance, dig, client){
                         )
                         .addField("Balance", `${balance-amount}`);
                     embedMessage.edit(replyEmbed);
-                    updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                    updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                     holder = false;
 
                 } else if (userSum === 21) {
@@ -77,7 +81,7 @@ async function blackjack(msg, amount, balance, dig, client){
                         )
                         .addField("Balance", `$${balance+profit}`);
                     embedMessage.edit(replyEmbed);
-                    updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig);
+                    updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig, false);
                     holder = false
                 } else {
                     replyEmbed = new Discord.MessageEmbed()
@@ -109,7 +113,7 @@ async function blackjack(msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `$${balance+profit}`);
                         embedMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig, false);
                         secondCondition = false;
                         holder = false;
                     } else if (botSum === 21) {
@@ -123,7 +127,7 @@ async function blackjack(msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `$${balance-amount}`);
                         embedMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                         secondCondition = false;
                         holder = false;
                     } else if (botSum > userSum && botSum >= 17) {
@@ -136,7 +140,7 @@ async function blackjack(msg, amount, balance, dig, client){
                                 {inline: true, name: "Dealer's hand: ", value: `${botHand}\n sum = ${botSum}`}
                             ).addField("Balance", `$${balance-amount}`);
                         embedMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                         secondCondition = false;
                         holder = false;
                     }
@@ -166,7 +170,7 @@ async function blackjack(msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `${balance - amount}`);
                         embedMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                         holder = false;
                         secondCondition = false;
                     } else if (userSum === 21) {
@@ -180,7 +184,7 @@ async function blackjack(msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `$${balance + profit}`);
                         embedMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig, false);
                         holder = false;
                         secondCondition = false;
                     }
@@ -200,7 +204,7 @@ async function blackjack(msg, amount, balance, dig, client){
                                 )
                                 .addField("Balance", `$${balance + profit}`);
                             embedMessage.edit(replyEmbed);
-                            updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig);
+                            updateMoney.updateMoney(discordID, discordUsername, (balance + profit), dig, false);
                             secondCondition = false;
                             holder = false;
                         } else if (botSum === 21) {
@@ -214,7 +218,7 @@ async function blackjack(msg, amount, balance, dig, client){
                                 )
                                 .addField("Balance", `$${balance - amount}`);
                             embedMessage.edit(replyEmbed);
-                            updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                            updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                             secondCondition = false;
                             holder = false;
                         } else if (botSum > userSum && botSum >=17) {
@@ -227,7 +231,7 @@ async function blackjack(msg, amount, balance, dig, client){
                                     {inline: true, name: "Dealer's hand: ", value: `${botHand}\n sum = ${botSum}`}
                                 ).addField("Balance", `$${balance - amount}`);
                             embedMessage.edit(replyEmbed);
-                            updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig);
+                            updateMoney.updateMoney(discordID, discordUsername, (balance - amount), dig, false);
                             secondCondition = false;
                             holder = false;
                         }

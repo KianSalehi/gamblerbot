@@ -1,9 +1,10 @@
 const updateMoney = require('../helpers/updateMoney');
 const Discord = require('discord.js');
 const checkRegistered = require('../helpers/checkRegistered');
+const setInGame = require('../helpers/setInGame');
 
 //function for duel
-async function duel(msg, enemy, amount, balance, dig, client){
+async function duel(msg, enemy, amount, balance, dig, inGame, client){
     let discordID = msg.author.id;
     let discordName = msg.author.username;
     if((enemy===undefined) || (enemy===" ")){
@@ -35,14 +36,20 @@ async function duel(msg, enemy, amount, balance, dig, client){
         msg.reply(`${enemyName} does not have enough money!`);
         return;
     }
+    if(inGame == true){
+        msg.reply("You are already in a game");
+        return;
+    }
         let replyEmbed = new Discord.MessageEmbed()
             .setColor('BLUE')
             .setTitle("Duel")
             .setDescription(`<@${discordID}> you have dueled <@!${enemyID}> for $${amount}, to accept type -accept`)
             .addField("How to play", `-accept: To accept the challenge`);
             msg.reply(replyEmbed);
-            client.on('message', (msg)=>{
+            client.on('message', async (msg)=>{
                 if((msg.content.toLowerCase() === "-accept")&&(msg.author.id ===enemyID)&&(holder === true)){
+                    await setInGame.setInGame(discordID,discordName, balance, dig, true);
+                    await setInGame.setInGame(enemyID, enemyName, enemyBalance, enemyDig, true);
                     holder =false;
                     let userHealth=100;
                     let enemyHealth = 100;
@@ -60,8 +67,8 @@ async function duel(msg, enemy, amount, balance, dig, client){
                                 .addFields({inline: true, name:`${discordName}: `, value: `${userHealth}hp` },
                                     {inline: true, name:`${enemyName}`, value: `${enemyHealth}hp`});
                             msg.reply(replyEmbed);
-                            updateMoney.updateMoney(enemyID, enemyName, (enemyBalance+amount), enemyDig);
-                            updateMoney.updateMoney(discordID, discordName, (balance-amount), dig);
+                            updateMoney.updateMoney(enemyID, enemyName, (enemyBalance+amount), enemyDig, false);
+                            updateMoney.updateMoney(discordID, discordName, (balance-amount), dig, false);
                             clearInterval(refreshID);
                             holder =false;
                         }
@@ -73,8 +80,8 @@ async function duel(msg, enemy, amount, balance, dig, client){
                                 .addFields({inline: true, name:`${discordName}: `, value: `${userHealth}hp` },
                                     {inline: true, name:`${enemyName}`, value: `${enemyHealth}hp`});
                             msg.reply(replyEmbed);
-                            updateMoney.updateMoney(enemyID, enemyName, (enemyBalance-amount), enemyDig);
-                            updateMoney.updateMoney(discordID, discordName, (balance+amount), dig);
+                            updateMoney.updateMoney(enemyID, enemyName, (enemyBalance-amount), enemyDig, false);
+                            updateMoney.updateMoney(discordID, discordName, (balance+amount), dig, false);
                             clearInterval(refreshID);
                             holder =false;
 

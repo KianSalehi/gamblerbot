@@ -1,8 +1,9 @@
 const updateMoney = require('../helpers/updateMoney');
 const Discord = require('discord.js');
+const setInGame = require('../helpers/setInGame');
 
 //function for crash
-async function crash (msg, amount, balance, dig, client){
+async function crash (msg, amount, balance, dig, inGame, client){
     let discordID = msg.author.id;
     let discordUsername = msg.author.username;
     let holder = true;
@@ -18,7 +19,11 @@ async function crash (msg, amount, balance, dig, client){
         msg.reply('You do not have enough money!');
         return;
     }
-
+    if(inGame == true){
+        msg.reply("You are already in a game");
+        return;
+    }
+    await setInGame.setInGame(discordID,discordUsername, balance, dig, true);
     let stop = ((Math.random()*5)).toFixed(1);
     stop = parseFloat(stop);
     console.log(stop);
@@ -70,7 +75,7 @@ async function crash (msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `$${balance-loss}`);
                         crashMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID, discordUsername, (balance-loss), dig);
+                        updateMoney.updateMoney(discordID, discordUsername, (balance-loss), dig, false);
                         holder = false;
                     }
                 },2000);
@@ -89,7 +94,7 @@ async function crash (msg, amount, balance, dig, client){
                             )
                             .addField("Balance", `$${balance+newProfit}`);
                         crashMessage.edit(replyEmbed);
-                        updateMoney.updateMoney(discordID,discordUsername,(balance+newProfit), dig);
+                        updateMoney.updateMoney(discordID,discordUsername,(balance+newProfit), dig, false);
                         holder = false
                         return;
                     }

@@ -29,7 +29,7 @@ async function guessLower(msg, number, amount, balance, dig, inGame){
         return;
     }
     await setInGame.setInGame(discordID,discordName, balance, dig, true);
-    let randomNumber = ((Math.random()*100)+1).toFixed(0);
+    let randomNumber = ((Math.random()*98)+1).toFixed(0);
     randomNumber = parseInt(randomNumber);
     let difference = number - randomNumber;
     if (difference<0){
